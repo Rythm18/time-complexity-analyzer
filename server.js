@@ -10,14 +10,15 @@ const port = process.env.PORT || 3000;
 
 app.use(express.json()); // Parse JSON request bodies
 
+
 app.post('/analyze-code', async (req, res) => {
   try {
     const code = req.body.code;
 
-    // Validate and sanitize code (implement your logic)
+    console.log('Analyzing code:', code);
 
     const response = await openAI.chat.completions.create({
-      model: "gpt-3.5-turbo", // Replace with the model you want to use
+      model: "gpt-3.5-turbo", 
       messages: [
         {
           "role": "system",
@@ -38,14 +39,14 @@ app.post('/analyze-code', async (req, res) => {
           ]
         }
       ],
-      temperature: 0,
+      temperature: 1,
       max_tokens: 256,
       top_p: 1,
       frequency_penalty: 0,
       presence_penalty: 0,
     });
 
-    const data = await response.json();
+    const data = response.json();
     const timeComplexity = data.choices[0].text.trim(); // Extract time complexity from the response
 
     res.json({ timeComplexity }); // Send time complexity data back
